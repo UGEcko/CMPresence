@@ -27,3 +27,9 @@ Keywords for SongEditMenu and Mapper:
 | {MapCharacteristic}          | The characteristic you are editing (Standard) |
 
 (You can commonly combine the Map Difficulty and Characteristic: "{MapDifficulty} {MapCharacteristic}" to combine it into "Hard Standard").
+
+
+This is what the properties looks like:
+<br>
+![image](https://github.com/user-attachments/assets/49549b22-0a05-4963-a290-ec24a11035b9)
+
