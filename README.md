@@ -37,3 +37,32 @@ This is what the properties looks like:
 ![image](https://github.com/user-attachments/assets/adf1960c-0365-4f81-af94-52b08a635aca)
 
 
+
+## Example
+
+While this project was made to improve my modding skills, YOU CAN ACTUALLY USE THIS! For example, you can omit song names for privacy / secret projects while still keeping the ChroMapper RPC:
+```json
+{
+  "ImageText": {
+    "largeImageText": "In Menus",
+    "smallImageText": "ChroMapper v{CMVersion}",
+    "isEnabled": true
+  },
+  "01_SongSelectMenu": {
+    "details": "Viewing song list.",
+    "isEnabled": false
+  },
+  "02_SongEditMenu": {
+    "details": "------",
+    "state": "Viewing song info.",
+    "isEnabled": true
+  },
+  "03_Mapper": {
+    "details": "Editing -----",
+    "state": "{MapDifficulty} {MapCharacteristic}",
+    "isEnabled": true
+  }
+}
+```
+
+
