@@ -16,77 +16,89 @@ namespace CMPresence.Main
         {
             Presence.Settings pSettings = Plugin.presenceManager.settings;
 
-            var details = "Invalid!";
+            var details = "";
             var state = "";
+
+            var smallText = "";
+            var largeText = "";
 
             if(to.name == "01_SongSelectMenu")
             {
-                if (pSettings.GetSettings(to.name).isEnabled == false)
+                if (pSettings.GetSettings(to.name).isEnabled == true)
                 {
-                    details = "";
-                    state = "";
-                } else
-                details = pSettings.GetSettings(to.name).details;
-                state = pSettings.GetSettings(to.name).state;
+                    details = pSettings.GetSettings(to.name).details;
+                    state = pSettings.GetSettings(to.name).state;
+                }
             } 
             else if (to.name == "02_SongEditMenu" || to.name == "03_Mapper")
             {
-                if (pSettings.GetSettings(to.name).isEnabled == false)
+                if (pSettings.GetSettings(to.name).isEnabled == true)
                 {
-                    details = "";
-                    state = "";
-                }
-                else
+                    details = pSettings.GetSettings(to.name).details;
+                    details += $"||{pSettings.GetSettings(to.name).state}";
 
-                details = pSettings.GetSettings(to.name).details;
-                details += $"||{pSettings.GetSettings(to.name).state}";
+                    // Merge the two so finding keywords is half the work.
 
-                // Merge the two so finding keywords is half the work.
 
-                // Keywords
-                var container = BeatSaberSongContainer.Instance;
-                var song = container.Song;
+                    // Base data for keywords
+                    var container = BeatSaberSongContainer.Instance;
+                    var song = container.Song;
+                    
 
-                var songName = song.SongName;
-                var songAuthor = song.SongAuthorName;
-                var songBPM = song.BeatsPerMinute;
-                var songRequirements = song.Requirements.Count;
-                var songEnvironment = song.EnvironmentName;
-                var beatmapSet = container.DifficultyData.ParentBeatmapSet;
-                var beatmapCharacteristicName = beatmapSet.BeatmapCharacteristicName;
-                var mapDifficulty = container.DifficultyData.Difficulty;
-
-                if (details.Contains("{SongName}"))
-                {
-                    details = details.Replace("{SongName}", songName);
-                } 
-                if(details.Contains("{SongAuthor}"))
-                {
-                    details = details.Replace("{SongAuthor}", songAuthor);
+                    if (details.Contains("{SongName}"))
+                    {
+                        details = details.Replace("{SongName}", song.SongName);
+                    }
+                    if (details.Contains("{SongAuthor}"))
+                    {
+                        details = details.Replace("{SongAuthor}", song.SongAuthorName);
+                    }
+                    if (details.Contains("{SongBPM}"))
+                    {
+                        details = details.Replace("{SongBPM}", song.BeatsPerMinute.ToString());
+                    }
+                    if (details.Contains("{SongRequirements}"))
+                    {
+                        details = details.Replace("{SongRequirements}", song.Requirements.Count.ToString());
+                    }
+                    if (details.Contains("{EnvironmentName}"))
+                    {
+                        details = details.Replace("{EnvironmentName}", song.EnvironmentName);
+                    }
+                    if (to.name == "03_Mapper") // Mapper exclusive keywords. 
+                    {
+                        var beatmapSet = container.DifficultyData.ParentBeatmapSet;
+                        if (details.Contains("{MapDifficulty}"))
+                        {
+                            details = details.Replace("{MapDifficulty}", container.DifficultyData.Difficulty);
+                        }
+                        if (details.Contains("{MapCharacteristic}"))
+                        {
+                            details = details.Replace("{MapCharacteristic}", beatmapSet.BeatmapCharacteristicName);
+                        }
+                    }
+                    state = details.Substring(details.LastIndexOf("||") + 2);
+                    details = details.Substring(0, details.LastIndexOf("||"));
                 }
-                if (details.Contains("{SongBPM}"))
-                {
-                    details = details.Replace("{SongBPM}", songBPM.ToString());
-                }
-                if(details.Contains("{SongRequirements}"))
-                {
-                    details = details.Replace("{SongRequirements}", songRequirements.ToString());
-                }
-                if(details.Contains("{EnvironmentName}"))
-                {
-                    details = details.Replace("{EnvironmentName}", songEnvironment);
-                }
-                if(details.Contains("{MapDifficulty}"))
-                {
-                    details = details.Replace("{MapDifficulty}", mapDifficulty);
-                }
-                if(details.Contains("{MapCharacteristic}"))
-                {
-                    details = details.Replace("{MapCharacteristic}", beatmapCharacteristicName);
-                }
-                state = details.Substring(details.LastIndexOf("||") + 2);
-                details = details.Substring(0, details.LastIndexOf("||"));
             }
+
+            // Image text stuff
+
+            if (pSettings.GetSettings("ImageText").isEnabled == true)
+            {
+                smallText = pSettings.GetSettings("ImageText").smallImageText;
+                smallText += $"||{pSettings.GetSettings("ImageText").largeImageText}";
+
+                if (smallText.Contains("{CMVersion}"))
+                {
+                    smallText = smallText.Replace("{CMVersion}", Application.version.ToString());
+                }
+
+                largeText = smallText.Substring(smallText.LastIndexOf("||") + 2);
+                smallText = smallText.Substring(0, smallText.LastIndexOf("||"));
+            }
+
+            // Image text stuff
 
             __instance.activity = new Activity
             {
@@ -99,9 +111,9 @@ namespace CMPresence.Main
                 Assets = new ActivityAssets
                 {
                     SmallImage = "newlogo",
-                    SmallText = $"ChroMapper v{Application.version}",
+                    SmallText = smallText,
                     LargeImage = "newlogo_glow",
-                    LargeText = "In Menus"
+                    LargeText = largeText,
                 }
             };
 

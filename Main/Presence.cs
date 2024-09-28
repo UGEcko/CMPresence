@@ -25,18 +25,24 @@ namespace CMPresence.Main
             {
                 if (File.Exists(SettingsPath)) // Check if it exists or if its not empty.
                 {
-                    if(File.ReadAllText(SettingsPath).Length == 0)
+                    string data = File.ReadAllText(SettingsPath);
+                    settings = JsonConvert.DeserializeObject<Dictionary<string, PresenceSetting>>(data);
+                    if (settings == null)
                     {
                         File.Delete(SettingsPath);
                         Init();
                     }
-                    string data = File.ReadAllText(SettingsPath);
-                    settings = JsonConvert.DeserializeObject<Dictionary<string, PresenceSetting>>(data);
-                    Debug.Log($"Found {settings.Keys.Count} keys...");
                 }
                 else
                 {
-                    Debug.Log($"Adding config file for Presence...");
+                    Debug.Log($"Adding config file for presence...");
+
+                    settings.Add("ImageText", new PresenceSetting
+                    {
+                        largeImageText = "In Menus",
+                        smallImageText = "ChroMapper v{CMVersion}",
+                        isEnabled = true
+                    });
 
                     settings.Add("01_SongSelectMenu", new PresenceSetting
                     {
@@ -46,14 +52,15 @@ namespace CMPresence.Main
 
                     settings.Add("02_SongEditMenu", new PresenceSetting
                     {
-                        details = "Viewing song info.",
+                        details = "{SongName}",
+                        state = "Viewing song info.",
                         isEnabled = true
                     });
 
                     settings.Add("03_Mapper", new PresenceSetting
                     {
-                        details = "Editing map.",
-                        state = "Whatever difficulty.",
+                        details = "Editing {SongName}",
+                        state = "{MapDifficulty} {MapCharacteristic}",
                         isEnabled = true
                     });
 
@@ -88,14 +95,25 @@ namespace CMPresence.Main
             string? details { get; set; }
             string? state { get; set; }
 
+            string? largeImageText {  get; set; }
+
+            string? smallImageText {  get; set; }
+
+
             bool? isEnabled {  get; set; }
         }
 
         public class PresenceSetting : ISetting
         {
-            public string? details { get; set; } = "";
-            public string? state { get; set; } = "";
-
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public string? details { get; set; }
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public string? state { get; set; }
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public string? largeImageText { get; set; }
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public string? smallImageText { get; set; }
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public bool? isEnabled { get; set; } = true;
         }
 
