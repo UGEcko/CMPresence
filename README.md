@@ -53,12 +53,12 @@ While this project was made to improve my modding skills, YOU CAN ACTUALLY USE T
     "isEnabled": false
   },
   "02_SongEditMenu": {
-    "details": "------",
+    "details": "----",
     "state": "Viewing song info.",
     "isEnabled": true
   },
   "03_Mapper": {
-    "details": "Editing -----",
+    "details": "Editing ----",
     "state": "{MapDifficulty} {MapCharacteristic}",
     "isEnabled": true
   }
