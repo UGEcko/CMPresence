@@ -37,11 +37,12 @@ namespace CMPresence.Main
                 {
                     Debug.Log($"Adding config file for presence...");
 
-                    settings.Add("ImageText", new PresenceSetting
+                    settings.Add("Properties", new PresenceSetting
                     {
                         largeImageText = "In Menus",
                         smallImageText = "ChroMapper v{CMVersion}",
-                        isEnabled = true
+                        isEnabled = true,
+                        useTimeMappingAsTimestamp = true,
                     });
 
                     settings.Add("01_SongSelectMenu", new PresenceSetting
@@ -101,6 +102,8 @@ namespace CMPresence.Main
 
 
             bool? isEnabled {  get; set; }
+            
+            bool? useTimeMappingAsTimestamp {  get; set; }
         }
 
         public class PresenceSetting : ISetting
@@ -115,6 +118,10 @@ namespace CMPresence.Main
             public string? smallImageText { get; set; }
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public bool? isEnabled { get; set; } = true;
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public bool? useTimeMappingAsTimestamp { get; set; }
+            
         }
 
     }

@@ -21,6 +21,26 @@ namespace CMPresence.Main
 
             var smallText = "";
             var largeText = "";
+            
+            // RPC Property stuff
+            
+            var ts_start = (long)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds; // Timestamp variable
+
+            if (pSettings.GetSettings("Properties").isEnabled == true)
+            {
+                smallText = pSettings.GetSettings("Properties").smallImageText;
+                smallText += $"||{pSettings.GetSettings("Properties").largeImageText}";
+
+                if (smallText.Contains("{CMVersion}"))
+                {
+                    smallText = smallText.Replace("{CMVersion}", Application.version.ToString());
+                }
+
+                largeText = smallText.Substring(smallText.LastIndexOf("||") + 2);
+                smallText = smallText.Substring(0, smallText.LastIndexOf("||"));
+            }
+
+            // RPC Property stuff
 
             if(to.name == "01_SongSelectMenu")
             {
@@ -76,29 +96,37 @@ namespace CMPresence.Main
                         {
                             details = details.Replace("{MapCharacteristic}", beatmapSet.BeatmapCharacteristicName);
                         }
+                        if (details.Contains("{EventCount}"))
+                        {
+                            details = details.Replace("{EventCount}", container.Map.Events.Count.ToString());
+                        }
+                        if (details.Contains("{NoteCount}"))
+                        {
+                            details = details.Replace("{NoteCount}", container.Map.Notes.Count.ToString());
+                        }
+                        if (details.Contains("{ArcCount}"))
+                        {
+                            details = details.Replace("{EventCount}", container.Map.Arcs.Count.ToString());
+                        }
+                        if (details.Contains("{ChainCount}"))
+                        {
+                            details = details.Replace("{NoteCount}", container.Map.Chains.Count.ToString());
+                        }
+                        if (details.Contains("{WallCount}"))
+                        {
+                            details = details.Replace("{NoteCount}", container.Map.Obstacles.Count.ToString());
+                        }
+                        
+                        // Timestamp thingy
+                        if (pSettings.GetSettings("Properties").useTimeMappingAsTimestamp == true)
+                        {
+                            ts_start = (long)(DateTimeOffset.UtcNow.ToUnixTimeSeconds() - (container.Map.Time * 60));
+                        }
                     }
                     state = details.Substring(details.LastIndexOf("||") + 2);
                     details = details.Substring(0, details.LastIndexOf("||"));
                 }
             }
-
-            // Image text stuff
-
-            if (pSettings.GetSettings("ImageText").isEnabled == true)
-            {
-                smallText = pSettings.GetSettings("ImageText").smallImageText;
-                smallText += $"||{pSettings.GetSettings("ImageText").largeImageText}";
-
-                if (smallText.Contains("{CMVersion}"))
-                {
-                    smallText = smallText.Replace("{CMVersion}", Application.version.ToString());
-                }
-
-                largeText = smallText.Substring(smallText.LastIndexOf("||") + 2);
-                smallText = smallText.Substring(0, smallText.LastIndexOf("||"));
-            }
-
-            // Image text stuff
 
             __instance.activity = new Activity
             {
@@ -106,7 +134,7 @@ namespace CMPresence.Main
                 State = state,
                 Timestamps = new ActivityTimestamps
                 {
-                    Start = (long)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds
+                    Start = ts_start,
                 },
                 Assets = new ActivityAssets
                 {
