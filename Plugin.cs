@@ -12,15 +12,15 @@ namespace CMPresence
         string harmonyID = "ugecko.CMPresence";
         Harmony harmony = null;
 
-        public static Presence presenceManager;
+        public static PresenceManager PresenceManager;
         [Init]
         void Init()
         {
             harmony = new Harmony(harmonyID);
             harmony.PatchAll();
 
-            presenceManager = new Presence();
-            presenceManager.settings.Init();
+            PresenceManager = new PresenceManager();
+            PresenceManager.settings.Init();
         }
 
         [Exit]
