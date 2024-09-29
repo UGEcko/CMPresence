@@ -2,7 +2,7 @@
   "id": "CMPresence",
   "name": "CMPresence",
   "author": "UGEcko",
-  "version": "v1.0.1",
+  "version": "v1.1.0",
   "description": "Add addtional configuration to the ChroMapper RPC",
   "git": "https://github.com/UGEcko/CMPresence"
 }

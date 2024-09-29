@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using HarmonyLib;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,10 +16,12 @@ namespace CMPresence.Main
         public static Scene lastScene;
         public static Scene nextScene;
         public static DiscordController discordController;
-
+        
         public static string SettingsPath = UnityEngine.Application.persistentDataPath + "/CMPresence.json";
         
         public static DateTime lastFileWriteTime;
+
+        public static int hasDynamicData = 0;
 
         public Settings settings = new Settings();
 
@@ -26,7 +29,7 @@ namespace CMPresence.Main
         {
             return new FileInfo(SettingsPath);
         } 
-
+        
         public class Settings
         {
             private Dictionary<string, PresenceSetting> settings = new Dictionary<string, PresenceSetting>();

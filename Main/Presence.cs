@@ -12,7 +12,7 @@ public class Presence
 {
     public void UpdateRPC(Scene from, Scene to, DiscordController __instance)
     {
-        if (PresenceManager.GetConfigFile().LastWriteTime != PresenceManager.lastFileWriteTime)
+        if (PresenceManager.GetConfigFile().LastWriteTime != PresenceManager.lastFileWriteTime) // If the config was changed in anyway, update the class.
         {
             Debug.Log("Detected changes in config file. Updating properties...");
             Plugin.PresenceManager.settings.Init();
@@ -21,6 +21,8 @@ public class Presence
         PresenceManager.nextScene = to;
         PresenceManager.discordController = __instance;
         PresenceManager.Settings pSettings = Plugin.PresenceManager.settings;
+
+        PresenceManager.hasDynamicData = 0; // Set dynamic data to 0.
 
         var details = "";
         var state = "";
@@ -104,25 +106,35 @@ public class Presence
                     }
                     if (details.Contains("{EventCount}"))
                     {
+                        PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Events.Count;
                         details = details.Replace("{EventCount}", container.Map.Events.Count.ToString());
                     }
                     if (details.Contains("{NoteCount}"))
                     {
+                        PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Notes.Count;
                         details = details.Replace("{NoteCount}", container.Map.Notes.Count.ToString());
                     }
                     if (details.Contains("{ArcCount}"))
                     {
-                        details = details.Replace("{EventCount}", container.Map.Arcs.Count.ToString());
+                        PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Arcs.Count;
+                        details = details.Replace("{ArcCount}", container.Map.Arcs.Count.ToString());
                     }
                     if (details.Contains("{ChainCount}"))
                     {
+                        PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Chains.Count;
                         details = details.Replace("{ChainCount}", container.Map.Chains.Count.ToString());
                     }
                     if (details.Contains("{WallCount}"))
                     {
+                        PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Obstacles.Count;
                         details = details.Replace("{WallCount}", container.Map.Obstacles.Count.ToString());
                     }
-                        
+                    if (details.Contains("{BombCount}"))
+                    {
+                        PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Bombs.Count;
+                        details = details.Replace("{BombCount}", container.Map.Bombs.Count.ToString());
+                    }
+                    
                     // Timestamp thingy
                     if (pSettings.GetSettings("Properties").useTimeMappingAsTimestamp == true)
                     {
