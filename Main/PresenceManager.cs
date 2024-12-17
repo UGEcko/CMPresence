@@ -149,7 +149,6 @@ namespace CMPresence.Main
             }
             else
             {
-                Debug.Log("Current platform is null.");
                 return null;
             }
         }

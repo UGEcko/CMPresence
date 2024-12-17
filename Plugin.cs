@@ -25,7 +25,6 @@ namespace CMPresence
 
             LoadInitialMap.PlatformLoadedEvent += (pf) =>
             {
-                Debug.Log("PLATFORM!!!");
                 PresenceManager.CurrentPlatform = pf;
             };
 
