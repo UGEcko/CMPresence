@@ -16,6 +16,8 @@ namespace CMPresence.Main
         public static Scene lastScene;
         public static Scene nextScene;
         public static DiscordController discordController;
+
+        public static PlatformDescriptor CurrentPlatform;
         
         public static string SettingsPath = UnityEngine.Application.persistentDataPath + "/CMPresence.json";
         
@@ -28,7 +30,7 @@ namespace CMPresence.Main
         public static FileInfo GetConfigFile()
         {
             return new FileInfo(SettingsPath);
-        } 
+        }
         
         public class Settings
         {
@@ -137,6 +139,19 @@ namespace CMPresence.Main
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public bool? useTimeMappingAsTimestamp { get; set; }
             
+        }
+
+        public static PlatformDescriptor GetPlatform()
+        {
+            if(CurrentPlatform != null)
+            {
+                return CurrentPlatform;
+            }
+            else
+            {
+                Debug.Log("Current platform is null.");
+                return null;
+            }
         }
 
     }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Beatmap.Base;
 using Discord;
 using HarmonyLib;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -129,11 +131,6 @@ public class Presence
                         PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Obstacles.Count;
                         details = details.Replace("{WallCount}", container.Map.Obstacles.Count.ToString());
                     }
-                    if (details.Contains("{BombCount}"))
-                    {
-                        PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Bombs.Count;
-                        details = details.Replace("{BombCount}", container.Map.Bombs.Count.ToString());
-                    }
                     
                     // Timestamp thingy
                     if (pSettings.GetSettings("Properties").useTimeMappingAsTimestamp == true)
@@ -143,7 +140,7 @@ public class Presence
                 }
                 state = details.Substring(details.LastIndexOf("||") + 2);
                 details = details.Substring(0, details.LastIndexOf("||"));
-            } 
+            }
         }
 
         __instance.activity = new Activity
@@ -158,10 +155,29 @@ public class Presence
                 {
                     SmallImage = "newlogo",
                     SmallText = smallText,
-                    LargeImage = "newlogo_glow",
+                    LargeImage = GetPlatformID(PresenceManager.GetPlatform(), to),
                     LargeText = largeText,
                 }
             };
             __instance.UpdatePresence();
+    }
+
+    private string GetPlatformID(PlatformDescriptor platform, Scene scene)
+    {
+        if (scene.name == "03_Mapper")
+        {
+            string platformDiscordID = platform.gameObject.name
+                .Replace("(Clone)", "")
+                .Replace(" ", "")
+                .ToLowerInvariant()
+                .Trim();
+
+            return platformDiscordID;
+        }
+        else
+        {
+            return "newlogo_glow";
+        }
+        
     }
 }

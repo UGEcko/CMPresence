@@ -23,6 +23,12 @@ namespace CMPresence
             PresenceManager = new PresenceManager();
             PresenceManager.settings.Init();
 
+            LoadInitialMap.PlatformLoadedEvent += (pf) =>
+            {
+                Debug.Log("PLATFORM!!!");
+                PresenceManager.CurrentPlatform = pf;
+            };
+
             LoadInitialMap.LevelLoadedEvent += () =>
             {
                 if (PresenceManager.settings.GetSettings("03_Mapper").isEnabled == true)
@@ -44,8 +50,7 @@ namespace CMPresence
                                       container.Map.Notes.Count +
                                       container.Map.Obstacles.Count +
                                       container.Map.Arcs.Count +
-                                      container.Map.Chains.Count +
-                                      container.Map.Bombs.Count;
+                                      container.Map.Chains.Count;
                         
                         if (newData != lastData) {
                             lastData = newData;
