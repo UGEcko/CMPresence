@@ -20,7 +20,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.Memory" Version="4.5.5" />
-    <Reference Include="$(ChroMapperDir)\ChroMapper_Data\Managed\Main.dll" Publicize="true" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +34,10 @@
     </Reference>
     <Reference Include="Intersections">
       <HintPath>..\..\Editors\ChromapperV0.10\chromapper\ChroMapper_Data\Managed\Intersections.dll</HintPath>
+    </Reference>
+    <Reference Include="Main">
+      <HintPath>..\..\Editors\ChromapperV0.10\chromapper\ChroMapper_Data\Managed\Main.dll</HintPath>
+      <publicize>True</publicize>
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>..\..\Editors\ChromapperV0.10\chromapper\ChroMapper_Data\Managed\Mono.Cecil.dll</HintPath>

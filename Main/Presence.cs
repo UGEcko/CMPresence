@@ -156,7 +156,7 @@ public class Presence
                     SmallImage = "newlogo",
                     SmallText = smallText,
                     LargeImage = GetPlatformID(PresenceManager.GetPlatform(), to),
-                    LargeText = largeText,
+                    LargeText = GetEnvironmentName(largeText),
                 }
             };
             __instance.UpdatePresence();
@@ -164,20 +164,31 @@ public class Presence
 
     private string GetPlatformID(PlatformDescriptor platform, Scene scene)
     {
-        if (scene.name == "03_Mapper")
-        {
-            string platformDiscordID = platform.gameObject.name
-                .Replace("(Clone)", "")
-                .Replace(" ", "")
-                .ToLowerInvariant()
-                .Trim();
-
-            return platformDiscordID;
-        }
-        else
+        if (platform == null || scene.name != "03_Mapper")
         {
             return "newlogo_glow";
         }
-        
+
+        return platform.gameObject.name
+            .Replace("(Clone)", "")
+            .Replace(" ", "")
+            .ToLowerInvariant()
+            .Trim();
+    }
+    
+    private string GetEnvironmentName(string largeText)
+    {
+        if (largeText != "")
+        {
+            return largeText;
+        }
+        else
+        {
+            var jsonEnvironmentName = BeatSaberSongContainer.Instance.Song.EnvironmentName;
+
+            var platformName = SongInfoEditUI.VanillaEnvironments
+                .Find(x => x.JsonName == jsonEnvironmentName)?.HumanName ?? jsonEnvironmentName;
+            return platformName;
+        }
     }
 }
