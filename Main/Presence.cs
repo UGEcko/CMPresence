@@ -43,7 +43,7 @@ public class Presence
 
             if (smallText.Contains("{CMVersion}"))
             {
-                smallText = smallText.Replace("{CMVersion}", Application.version.ToString());
+                UpdateText(ref smallText, "{CMVersion}", Application.version.ToString());
             }
 
             largeText = smallText.Substring(smallText.LastIndexOf("||") + 2);
@@ -77,59 +77,59 @@ public class Presence
 
                 if (details.Contains("{SongName}"))
                 {
-                    details = details.Replace("{SongName}", song.SongName);
+                    UpdateText(ref details, "{SongName}", song.SongName);
                 }
                 if (details.Contains("{SongAuthor}"))
                 {
-                    details = details.Replace("{SongAuthor}", song.SongAuthorName);
+                    UpdateText(ref details, "{SongAuthor}", song.SongAuthorName);
                 }
                 if (details.Contains("{SongBPM}"))
                 {
-                    details = details.Replace("{SongBPM}", song.BeatsPerMinute.ToString());
+                    UpdateText(ref details, "{SongBPM}", song.BeatsPerMinute.ToString());
                 }
                 if (details.Contains("{SongRequirements}"))
                 {
-                    details = details.Replace("{SongRequirements}", song.Requirements.Count.ToString());
+                    UpdateText(ref details, "{SongRequirements}", song.Requirements.Count.ToString());
                 }
                 if (details.Contains("{EnvironmentName}"))
                 {
-                    details = details.Replace("{EnvironmentName}", song.EnvironmentName);
+                    UpdateText(ref details, "{EnvironmentName}", song.EnvironmentName);
                 }
                 if (to.name == "03_Mapper") // Mapper exclusive keywords. 
                 {
                     var beatmapSet = container.DifficultyData.ParentBeatmapSet;
                     if (details.Contains("{MapDifficulty}"))
                     {
-                        details = details.Replace("{MapDifficulty}", container.DifficultyData.Difficulty);
+                        UpdateText(ref details, "{MapDifficulty}", container.DifficultyData.Difficulty);
                     }
                     if (details.Contains("{MapCharacteristic}"))
                     {
-                        details = details.Replace("{MapCharacteristic}", beatmapSet.BeatmapCharacteristicName);
+                        UpdateText(ref details, "{MapCharacteristic}", beatmapSet.BeatmapCharacteristicName);
                     }
                     if (details.Contains("{EventCount}"))
                     {
                         PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Events.Count;
-                        details = details.Replace("{EventCount}", container.Map.Events.Count.ToString());
+                        UpdateText(ref details, "{EventCount}", container.Map.Events.Count.ToString());
                     }
                     if (details.Contains("{NoteCount}"))
                     {
                         PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Notes.Count;
-                        details = details.Replace("{NoteCount}", container.Map.Notes.Count.ToString());
+                        UpdateText(ref details, "{NoteCount}", container.Map.Notes.Count.ToString());
                     }
                     if (details.Contains("{ArcCount}"))
                     {
                         PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Arcs.Count;
-                        details = details.Replace("{ArcCount}", container.Map.Arcs.Count.ToString());
+                        UpdateText(ref details, "{ArcCount}", container.Map.Arcs.Count.ToString());
                     }
                     if (details.Contains("{ChainCount}"))
                     {
                         PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Chains.Count;
-                        details = details.Replace("{ChainCount}", container.Map.Chains.Count.ToString());
+                        UpdateText(ref details, "{ChainCount}", container.Map.Chains.Count.ToString());
                     }
                     if (details.Contains("{WallCount}"))
                     {
                         PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Obstacles.Count;
-                        details = details.Replace("{WallCount}", container.Map.Obstacles.Count.ToString());
+                        UpdateText(ref details, "{WallCount}", container.Map.Obstacles.Count.ToString());
                     }
                     
                     // Timestamp thingy
@@ -160,6 +160,15 @@ public class Presence
                 }
             };
             __instance.UpdatePresence();
+    }
+
+    private string UpdateText(ref string text, string keyword, string replacement)
+    {
+        if (text.Contains(keyword))
+        {
+            text = text.Replace(keyword, replacement);
+        }
+        return text;
     }
 
     private string GetPlatformID(PlatformDescriptor platform, Scene scene)
