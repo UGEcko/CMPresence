@@ -20,7 +20,7 @@ To reset the RPC to default values, delete the JSON file and relaunch ChroMapper
 ## Keywords
 The plugin includes several keywords to dynamically display information in specific scenes, such as the song's BPM, difficulty, and author name.
 
-### Keywords for SongEditMenu and Mapper 	
+### Keywords for SongEditMenu and Mapper (Case-Sensitive)
 
 | Keyword                             | Description                                                           |
 |-------------------------------------|-----------------------------------------------------------------------|
