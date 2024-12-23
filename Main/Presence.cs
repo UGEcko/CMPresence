@@ -36,10 +36,10 @@ public class Presence
         
         var ts_start = (long)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds; // Timestamp variable
 
-        if (pSettings.GetSettings("Properties").isEnabled == true)
+        if (pSettings.GetSettings("Properties").IsEnabled == true)
         {
-            smallText = pSettings.GetSettings("Properties").smallImageText;
-            smallText += $"||{pSettings.GetSettings("Properties").largeImageText}";
+            smallText = pSettings.GetSettings("Properties").SmallImageText;
+            smallText += $"||{pSettings.GetSettings("Properties").LargeImageText}";
 
             if (smallText.Contains("{CMVersion}"))
             {
@@ -54,18 +54,18 @@ public class Presence
 
         if(to.name == "01_SongSelectMenu")
         {
-            if (pSettings.GetSettings(to.name).isEnabled == true)
+            if (pSettings.GetSettings(to.name).IsEnabled == true)
             {
-                details = pSettings.GetSettings(to.name).details;
-                state = pSettings.GetSettings(to.name).state;
+                details = pSettings.GetSettings(to.name).Details;
+                state = pSettings.GetSettings(to.name).State;
             }
         } 
         else if (to.name == "02_SongEditMenu" || to.name == "03_Mapper")
         {
-            if (pSettings.GetSettings(to.name).isEnabled == true)
+            if (pSettings.GetSettings(to.name).IsEnabled == true)
             {
-                details = pSettings.GetSettings(to.name).details;
-                details += $"||{pSettings.GetSettings(to.name).state}";
+                details = pSettings.GetSettings(to.name).Details;
+                details += $"||{pSettings.GetSettings(to.name).State}";
 
                 // Merge the two so finding keywords is half the work.
 
@@ -133,7 +133,7 @@ public class Presence
                     }
                     
                     // Timestamp thingy
-                    if (pSettings.GetSettings("Properties").useTimeMappingAsTimestamp == true)
+                    if (pSettings.GetSettings("Properties").UseTimeMappingAsTimestamp == true)
                     {
                         ts_start = (long)(DateTimeOffset.UtcNow.ToUnixTimeSeconds() - (container.Map.Time * 60));
                     }

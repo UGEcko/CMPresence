@@ -30,7 +30,7 @@ namespace CMPresence
 
             LoadInitialMap.LevelLoadedEvent += () =>
             {
-                if (PresenceManager.settings.GetSettings("03_Mapper").isEnabled == true)
+                if (PresenceManager.settings.GetSettings("03_Mapper").IsEnabled == true)
                 {
                     var container = BeatSaberSongContainer.Instance;
                     int lastData = PresenceManager.hasDynamicData;

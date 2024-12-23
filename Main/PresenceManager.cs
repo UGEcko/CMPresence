@@ -56,30 +56,30 @@ namespace CMPresence.Main
 
                     settings.Add("Properties", new PresenceSetting
                     {
-                        largeImageText = "In Menus",
-                        smallImageText = "ChroMapper v{CMVersion}",
-                        isEnabled = true,
-                        useTimeMappingAsTimestamp = true,
+                        LargeImageText = "In Menus",
+                        SmallImageText = "ChroMapper v{CMVersion}",
+                        IsEnabled = true,
+                        UseTimeMappingAsTimestamp = true,
                     });
 
                     settings.Add("01_SongSelectMenu", new PresenceSetting
                     {
-                        details = "Viewing song list.",
-                        isEnabled = true
+                        Details = "Viewing song list.",
+                        IsEnabled = true
                     });
 
                     settings.Add("02_SongEditMenu", new PresenceSetting
                     {
-                        details = "{SongName}",
-                        state = "Viewing song info.",
-                        isEnabled = true
+                        Details = "{SongName}",
+                        State = "Viewing song info.",
+                        IsEnabled = true
                     });
 
                     settings.Add("03_Mapper", new PresenceSetting
                     {
-                        details = "Editing {SongName}",
-                        state = "{MapDifficulty} {MapCharacteristic}",
-                        isEnabled = true
+                        Details = "Editing {SongName}",
+                        State = "{MapDifficulty} {MapCharacteristic}",
+                        IsEnabled = true
                     });
 
                     File.WriteAllText(SettingsPath, JsonConvert.SerializeObject(settings, Formatting.Indented));
@@ -110,34 +110,34 @@ namespace CMPresence.Main
 
         public interface ISetting
         {
-            string? details { get; set; }
-            string? state { get; set; }
+            string? Details { get; set; }
+            string? State { get; set; }
 
-            string? largeImageText {  get; set; }
+            string? LargeImageText {  get; set; }
 
-            string? smallImageText {  get; set; }
+            string? SmallImageText {  get; set; }
 
 
-            bool? isEnabled {  get; set; }
+            bool? IsEnabled {  get; set; }
             
-            bool? useTimeMappingAsTimestamp {  get; set; }
+            bool? UseTimeMappingAsTimestamp {  get; set; }
         }
 
         public class PresenceSetting : ISetting
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public string? details { get; set; }
+            public string? Details { get; set; }
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public string? state { get; set; }
+            public string? State { get; set; }
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public string? largeImageText { get; set; }
+            public string? LargeImageText { get; set; }
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public string? smallImageText { get; set; }
+            public string? SmallImageText { get; set; }
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public bool? isEnabled { get; set; } = true;
+            public bool? IsEnabled { get; set; } = true;
             
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public bool? useTimeMappingAsTimestamp { get; set; }
+            public bool? UseTimeMappingAsTimestamp { get; set; }
             
         }
 
