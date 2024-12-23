@@ -13,17 +13,17 @@ namespace CMPresence.Main
 {
     public class PresenceManager
     {
-        public static Scene lastScene;
-        public static Scene nextScene;
-        public static DiscordController discordController;
+        public static Scene LastScene;
+        public static Scene NextScene;
+        public static DiscordController DiscordController;
 
         public static PlatformDescriptor CurrentPlatform;
         
         public static string SettingsPath = UnityEngine.Application.persistentDataPath + "/CMPresence.json";
         
-        public static DateTime lastFileWriteTime;
+        public static DateTime LastFileWriteTime;
 
-        public static int hasDynamicData = 0;
+        public static int HasDynamicData = 0;
 
         public Settings settings = new Settings();
 
@@ -48,7 +48,7 @@ namespace CMPresence.Main
                         Init();
                     }
 
-                    lastFileWriteTime = GetConfigFile().LastWriteTime;
+                    LastFileWriteTime = GetConfigFile().LastWriteTime;
                 }
                 else
                 {

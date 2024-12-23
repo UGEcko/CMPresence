@@ -33,7 +33,7 @@ namespace CMPresence
                 if (PresenceManager.settings.GetSettings("03_Mapper").IsEnabled == true)
                 {
                     var container = BeatSaberSongContainer.Instance;
-                    int lastData = PresenceManager.hasDynamicData;
+                    int lastData = PresenceManager.HasDynamicData;
                     Timer timer = new Timer(5 * 1000);
                     timer.AutoReset = true;
                     timer.Enabled = true;
@@ -53,7 +53,7 @@ namespace CMPresence
                         
                         if (newData != lastData) {
                             lastData = newData;
-                            new Presence().UpdateRPC(PresenceManager.lastScene,PresenceManager.nextScene, PresenceManager.discordController);
+                            new Presence().UpdateRPC(PresenceManager.LastScene,PresenceManager.NextScene, PresenceManager.DiscordController);
                         }
                     };
                 }

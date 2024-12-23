@@ -15,17 +15,17 @@ public class Presence
 {
     public void UpdateRPC(Scene from, Scene to, DiscordController __instance)
     {
-        if (PresenceManager.GetConfigFile().LastWriteTime != PresenceManager.lastFileWriteTime) // If the config was changed in any way, update the class.
+        if (PresenceManager.GetConfigFile().LastWriteTime != PresenceManager.LastFileWriteTime) // If the config was changed in any way, update the class.
         {
             Debug.Log("Detected changes in config file. Updating properties...");
             Plugin.PresenceManager.settings.Init();
         }
-        PresenceManager.lastScene = from;
-        PresenceManager.nextScene = to;
-        PresenceManager.discordController = __instance;
+        PresenceManager.LastScene = from;
+        PresenceManager.NextScene = to;
+        PresenceManager.DiscordController = __instance;
         PresenceManager.Settings pSettings = Plugin.PresenceManager.settings;
 
-        PresenceManager.hasDynamicData = 0; // Set dynamic data to 0.
+        PresenceManager.HasDynamicData = 0; // Set dynamic data to 0.
 
         var details = "";
         var state = "";
@@ -150,27 +150,27 @@ public class Presence
                     });
                     RegisterFilter(details, "EventCount", (txt, kw) =>
                     {
-                        PresenceManager.hasDynamicData += container.Map.Events.Count;
+                        PresenceManager.HasDynamicData += container.Map.Events.Count;
                         details = UpdateText(txt, kw, container.Map.Events.Count.ToString());
                     });
                     RegisterFilter(details, "NoteCount", (txt, kw) =>
                     {
-                        PresenceManager.hasDynamicData += container.Map.Notes.Count;
+                        PresenceManager.HasDynamicData += container.Map.Notes.Count;
                         details = UpdateText(txt, kw, container.Map.Notes.Count.ToString());
                     });
                     RegisterFilter(details, "ArcCount", (txt, kw) =>
                     {
-                        PresenceManager.hasDynamicData += container.Map.Arcs.Count;
+                        PresenceManager.HasDynamicData += container.Map.Arcs.Count;
                         details = UpdateText(txt, kw, container.Map.Arcs.Count.ToString());
                     });
                     RegisterFilter(details, "ChainCount", (txt, kw) =>
                     {
-                        PresenceManager.hasDynamicData += container.Map.Chains.Count;
+                        PresenceManager.HasDynamicData += container.Map.Chains.Count;
                         details = UpdateText(txt, kw, container.Map.Chains.Count.ToString());
                     });
                     RegisterFilter(details, "WallCount", (txt, kw) =>
                     {
-                        PresenceManager.hasDynamicData += container.Map.Obstacles.Count;
+                        PresenceManager.HasDynamicData += container.Map.Obstacles.Count;
                         details = UpdateText(txt, kw, container.Map.Obstacles.Count.ToString());
                     });
                     
