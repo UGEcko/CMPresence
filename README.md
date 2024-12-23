@@ -22,21 +22,21 @@ The plugin includes several keywords to dynamically display information in speci
 
 ### Keywords for SongEditMenu and Mapper 	
 
-| Keyword                             | Description                                          |
-|-------------------------------------|------------------------------------------------------|
-| `{SongName}`                        | Displays the name of the song                        |
-| `{SongAuthor}`                      | Displays the author of the song                      |
-| `{SongBPM}`                         | Displays the song's BPM                              |
-| `{SongRequirements}` (Broken?)      | Displays the requirement count of the map            |
-| `{EnvironmentName}`                 | Displays the environment of the map                  |
-| `{MapDifficulty}` (Mapper only)     | Displays the difficulty (e.g., Hard/Expert)          |
+| Keyword                            | Description                                          |
+|------------------------------------|------------------------------------------------------|
+| `{SongName}`                       | Displays the name of the song                        |
+| `{SongAuthor}`                     | Displays the author of the song                      |
+| `{SongBPM}`                        | Displays the song's BPM                              |
+| `{SongRequirements}` (Broken?)     | Displays the requirement count of the map            |
+| `{Environment}`                 | Displays the environment of the map                  |
+| `{MapDifficulty}` (Mapper only)    | Displays the difficulty (e.g., Hard/Expert)          |
 | `{MapCharacteristic}` (Mapper only) | Displays the characteristic (e.g., Standard/Lawless) |
-| `{NoteCount}`  (Mapper only)         | Displays the amount of notes and bombs in the map              |
-| `{EventCount}` (Mapper only)        | Displays the amount of events in the map             |
-| `{ChainCount}` (Mapper only)        | Displays the amount of chains in the map             |
-| `{ArcCount}`   (Mapper only)          | Displays the amount of arcs in the map               |
-| `{WallCount}`  (Mapper only)         | Displays the amount of walls/obstacles in the map    |
-| `{CMVersion}`  (Images only)         | Displays the version of ChroMapper                   |
+| `{NoteCount}`  (Mapper only)        | Displays the amount of notes and bombs in the map              |
+| `{EventCount}` (Mapper only)       | Displays the amount of events in the map             |
+| `{ChainCount}` (Mapper only)       | Displays the amount of chains in the map             |
+| `{ArcCount}`   (Mapper only)         | Displays the amount of arcs in the map               |
+| `{WallCount}`  (Mapper only)        | Displays the amount of walls/obstacles in the map    |
+| `{CMVersion}`  (Images only)        | Displays the version of ChroMapper                   |
 
 
 **Note**: All keywords are in PascalCase.

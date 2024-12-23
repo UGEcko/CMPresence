@@ -40,11 +40,11 @@ public class Presence
         {
             smallText = pSettings.GetSettings("Properties").SmallImageText;
             smallText += $"||{pSettings.GetSettings("Properties").LargeImageText}";
-
-            if (smallText.Contains("{CMVersion}"))
+            
+            RegisterFilter(smallText, "CMVersion", (txt, kw) =>
             {
-                UpdateText(ref smallText, "{CMVersion}", Application.version.ToString());
-            }
+                smallText = UpdateText(txt, kw, Application.version.ToString());
+            });
 
             largeText = smallText.Substring(smallText.LastIndexOf("||") + 2);
             smallText = smallText.Substring(0, smallText.LastIndexOf("||"));
@@ -69,68 +69,68 @@ public class Presence
 
                 // Merge the two so finding keywords is half the work.
 
-
                 // Base data for keywords
                 var container = BeatSaberSongContainer.Instance;
                 var song = container.Song;
-                    
-
-                if (details.Contains("{SongName}"))
+                
+                RegisterFilter( details, "SongName", (txt, kw) =>
                 {
-                    UpdateText(ref details, "{SongName}", song.SongName);
-                }
-                if (details.Contains("{SongAuthor}"))
+                    details = UpdateText(txt, kw, song.SongName);
+                });
+                RegisterFilter(details, "SongAuthor", (txt, kw) =>
                 {
-                    UpdateText(ref details, "{SongAuthor}", song.SongAuthorName);
-                }
-                if (details.Contains("{SongBPM}"))
+                    details = UpdateText(txt, kw, song.SongAuthorName);
+                });
+                RegisterFilter(details, "SongBPM", (txt, kw) =>
                 {
-                    UpdateText(ref details, "{SongBPM}", song.BeatsPerMinute.ToString());
-                }
-                if (details.Contains("{SongRequirements}"))
+                    details = UpdateText(txt, kw, song.BeatsPerMinute.ToString());
+                });
+                RegisterFilter(details, "SongRequirements", (txt, kw) =>
                 {
-                    UpdateText(ref details, "{SongRequirements}", song.Requirements.Count.ToString());
-                }
-                if (details.Contains("{EnvironmentName}"))
+                    details = UpdateText(txt, kw, song.Requirements.Count.ToString());
+                });
+                RegisterFilter(details, "Environment", (txt, kw) =>
                 {
-                    UpdateText(ref details, "{EnvironmentName}", song.EnvironmentName);
-                }
+                    details = UpdateText(txt, kw, song.EnvironmentName);
+                });
+                
                 if (to.name == "03_Mapper") // Mapper exclusive keywords. 
                 {
                     var beatmapSet = container.DifficultyData.ParentBeatmapSet;
-                    if (details.Contains("{MapDifficulty}"))
+                    
+                    RegisterFilter(details, "MapDifficulty", (txt, kw) =>
                     {
-                        UpdateText(ref details, "{MapDifficulty}", container.DifficultyData.Difficulty);
-                    }
-                    if (details.Contains("{MapCharacteristic}"))
+                        details = UpdateText(txt, kw, container.DifficultyData.Difficulty);
+                    });
+                    RegisterFilter(details, "MapCharacteristic", (txt, kw) =>
                     {
-                        UpdateText(ref details, "{MapCharacteristic}", beatmapSet.BeatmapCharacteristicName);
-                    }
-                    if (details.Contains("{EventCount}"))
+                        details = UpdateText(txt, kw, beatmapSet.BeatmapCharacteristicName);
+                    });
+                    RegisterFilter(details, "EventCount", (txt, kw) =>
                     {
-                        PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Events.Count;
-                        UpdateText(ref details, "{EventCount}", container.Map.Events.Count.ToString());
-                    }
-                    if (details.Contains("{NoteCount}"))
+                        PresenceManager.hasDynamicData += container.Map.Events.Count;
+                        details = UpdateText(txt, kw, container.Map.Events.Count.ToString());
+                    });
+                    RegisterFilter(details, "NoteCount", (txt, kw) =>
                     {
-                        PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Notes.Count;
-                        UpdateText(ref details, "{NoteCount}", container.Map.Notes.Count.ToString());
-                    }
-                    if (details.Contains("{ArcCount}"))
+                        PresenceManager.hasDynamicData += container.Map.Notes.Count;
+                        details = UpdateText(txt, kw, container.Map.Notes.Count.ToString());
+                    });
+                    RegisterFilter(details, "ArcCount", (txt, kw) =>
                     {
-                        PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Arcs.Count;
-                        UpdateText(ref details, "{ArcCount}", container.Map.Arcs.Count.ToString());
-                    }
-                    if (details.Contains("{ChainCount}"))
+                        PresenceManager.hasDynamicData += container.Map.Arcs.Count;
+                        details = UpdateText(txt, kw, container.Map.Arcs.Count.ToString());
+                    });
+                    RegisterFilter(details, "ChainCount", (txt, kw) =>
                     {
-                        PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Chains.Count;
-                        UpdateText(ref details, "{ChainCount}", container.Map.Chains.Count.ToString());
-                    }
-                    if (details.Contains("{WallCount}"))
+                        PresenceManager.hasDynamicData += container.Map.Chains.Count;
+                        details = UpdateText(txt, kw, container.Map.Chains.Count.ToString());
+                    });
+                    RegisterFilter(details, "WallCount", (txt, kw) =>
                     {
-                        PresenceManager.hasDynamicData = PresenceManager.hasDynamicData + container.Map.Obstacles.Count;
-                        UpdateText(ref details, "{WallCount}", container.Map.Obstacles.Count.ToString());
-                    }
+                        PresenceManager.hasDynamicData += container.Map.Obstacles.Count;
+                        details = UpdateText(txt, kw, container.Map.Obstacles.Count.ToString());
+                    });
                     
                     // Timestamp thingy
                     if (pSettings.GetSettings("Properties").UseTimeMappingAsTimestamp == true)
@@ -162,13 +162,22 @@ public class Presence
             __instance.UpdatePresence();
     }
 
-    private string UpdateText(ref string text, string keyword, string replacement)
+    private string UpdateText(string text, string keyword, string replacement)
     {
         if (text.Contains(keyword))
         {
             text = text.Replace(keyword, replacement);
         }
         return text;
+    }
+    
+    private void RegisterFilter(string text, string keyword, Action<string, string> action)
+    {
+        string kw = "{" + keyword + "}";
+        if (text.Contains(kw))
+        {
+            action.Invoke(text, kw);
+        }
     }
 
     private string GetPlatformID(PlatformDescriptor platform, Scene scene)
@@ -187,7 +196,7 @@ public class Presence
     
     private string GetEnvironmentName(string largeText)
     {
-        if (largeText != "")
+        if (largeText != "" && SceneManager.GetActiveScene().name != "03_Mapper") // Fuck you im forcing env names.
         {
             return largeText;
         }
