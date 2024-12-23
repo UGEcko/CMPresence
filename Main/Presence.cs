@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Beatmap.Base;
 using Discord;
@@ -14,7 +15,7 @@ public class Presence
 {
     public void UpdateRPC(Scene from, Scene to, DiscordController __instance)
     {
-        if (PresenceManager.GetConfigFile().LastWriteTime != PresenceManager.lastFileWriteTime) // If the config was changed in anyway, update the class.
+        if (PresenceManager.GetConfigFile().LastWriteTime != PresenceManager.lastFileWriteTime) // If the config was changed in any way, update the class.
         {
             Debug.Log("Detected changes in config file. Updating properties...");
             Plugin.PresenceManager.settings.Init();
@@ -34,7 +35,7 @@ public class Presence
         
         // RPC Property stuff
         
-        var ts_start = (long)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds; // Timestamp variable
+        var tsStart = (long)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds; // Timestamp variable
 
         if (pSettings.GetSettings("Properties").IsEnabled == true)
         {
@@ -73,22 +74,63 @@ public class Presence
                 var container = BeatSaberSongContainer.Instance;
                 var song = container.Song;
                 
+                RegisterFilter(details, "Editor", (txt, kw) =>
+                {
+                    var editors = GetMapEditors(pSettings);
+                    if (editors.Count > 0)
+                    {
+                        var editor = editors.First();
+                        details = UpdateText(txt, kw, editor.Key);
+                    }
+                });
+                RegisterFilter(details, "Editor_Version", (txt, kw) =>
+                {
+                    var editors = GetMapEditors(pSettings);
+                    if (editors.Count > 0)
+                    {
+                        var editor = editors.First();
+                        details = UpdateText(txt, kw, editor.Value.ToString());
+                    }
+                });
+                RegisterFilter(details, "Editor_VersionMinor", (txt, kw) =>
+                {
+                    var editors = GetMapEditors(pSettings);
+                    if (editors.Count > 0)
+                    {
+                        var editor = editors.First();
+                        details = UpdateText(txt, kw, editor.Value.Minor.ToString());
+                    }
+                });
+                RegisterFilter(details, "Editor_VersionMajor", (txt, kw) =>
+                {
+                    var editors = GetMapEditors(pSettings);
+                    if (editors.Count > 0)
+                    {
+                        var editor = editors.First();
+                        details = UpdateText(txt, kw, editor.Value.Major.ToString());
+                    }
+                });
+                
                 RegisterFilter( details, "SongName", (txt, kw) =>
                 {
                     details = UpdateText(txt, kw, song.SongName);
                 });
+                
                 RegisterFilter(details, "SongAuthor", (txt, kw) =>
                 {
                     details = UpdateText(txt, kw, song.SongAuthorName);
                 });
+                
                 RegisterFilter(details, "SongBPM", (txt, kw) =>
                 {
                     details = UpdateText(txt, kw, song.BeatsPerMinute.ToString());
                 });
+                
                 RegisterFilter(details, "SongRequirements", (txt, kw) =>
                 {
                     details = UpdateText(txt, kw, song.Requirements.Count.ToString());
                 });
+                
                 RegisterFilter(details, "Environment", (txt, kw) =>
                 {
                     details = UpdateText(txt, kw, song.EnvironmentName);
@@ -135,7 +177,7 @@ public class Presence
                     // Timestamp thingy
                     if (pSettings.GetSettings("Properties").UseTimeMappingAsTimestamp == true)
                     {
-                        ts_start = (long)(DateTimeOffset.UtcNow.ToUnixTimeSeconds() - (container.Map.Time * 60));
+                        tsStart = (long)(DateTimeOffset.UtcNow.ToUnixTimeSeconds() - (container.Map.Time * 60));
                     }
                 }
                 state = details.Substring(details.LastIndexOf("||") + 2);
@@ -149,7 +191,7 @@ public class Presence
                 State = state,
                 Timestamps = new ActivityTimestamps
                 {
-                    Start = ts_start,
+                    Start = tsStart,
                 },
                 Assets = new ActivityAssets
                 {
@@ -208,5 +250,27 @@ public class Presence
                 .Find(x => x.JsonName == jsonEnvironmentName)?.HumanName ?? jsonEnvironmentName;
             return platformName;
         }
+    }
+
+    private Dictionary<string, Version> GetMapEditors(PresenceManager.Settings pSettings)
+    {
+        Dictionary<string, Version> editors = new();
+        string[] allowedEditors = pSettings.GetSettings("Properties").Editors;
+        var mapEditors = BeatSaberSongContainer.Instance.Song.Editors.editorsObject;
+        if (mapEditors.Count == 0 || allowedEditors.Length == 0)
+        {
+            return editors;
+        }
+        foreach (var editor in allowedEditors)
+        {
+            foreach (var cmEditor in mapEditors)
+            {
+                if (editor.ToLower() == cmEditor.Key.ToLower())
+                {
+                    editors.Add(cmEditor.Key, new Version(cmEditor.Value["version"]));
+                }
+            }
+        }
+        return editors;
     }
 }

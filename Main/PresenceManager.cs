@@ -60,6 +60,7 @@ namespace CMPresence.Main
                         SmallImageText = "ChroMapper v{CMVersion}",
                         IsEnabled = true,
                         UseTimeMappingAsTimestamp = true,
+                        Editors = new [] { "ReMapper", "ScuffedWalls"}
                     });
 
                     settings.Add("01_SongSelectMenu", new PresenceSetting
@@ -121,6 +122,8 @@ namespace CMPresence.Main
             bool? IsEnabled {  get; set; }
             
             bool? UseTimeMappingAsTimestamp {  get; set; }
+            
+            string[]? Editors { get; set; }
         }
 
         public class PresenceSetting : ISetting
@@ -138,6 +141,9 @@ namespace CMPresence.Main
             
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public bool? UseTimeMappingAsTimestamp { get; set; }
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public string[]? Editors { get; set; }
             
         }
 
