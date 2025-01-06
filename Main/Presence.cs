@@ -210,6 +210,11 @@ public class Presence
         {
             text = text.Replace(keyword, replacement);
         }
+        else 
+        {
+            // Remove the keyword if its not found.
+            text = text.Replace(keyword, "");
+        }
         return text;
     }
     
